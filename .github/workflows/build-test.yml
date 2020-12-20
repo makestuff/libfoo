@@ -15,4 +15,4 @@ jobs:
           submodules: 'recursive'
 
       - name: Build
-        run: env
+        run: env && echo "OWNER=${GITHUB_REPOSITORY%/*}; REPO=${GITHUB_REPOSITORY#*/}"
