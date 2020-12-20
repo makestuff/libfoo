@@ -15,4 +15,4 @@ jobs:
           submodules: 'recursive'
 
       - name: Build
-        run: cd .. && mkdir foobar && mv ${GITHUB_REPOSITORY#*/} foobar && cd foobar && ls -la
+        run: cd .. && mkdir foobar && mv ${GITHUB_REPOSITORY#*/} foobar/ && mv foobar ${GITHUB_REPOSITORY#*/} && cd ${GITHUB_REPOSITORY#*/} && ls -la
