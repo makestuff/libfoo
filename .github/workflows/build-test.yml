@@ -20,6 +20,7 @@ jobs:
           git init .
           git remote add origin https://github.com/makestuff/build-template.git
           git pull origin main
+          git submodule update --init --recursive
           ./build.sh Release
 
       - name: Test
@@ -40,9 +41,10 @@ jobs:
           git init .
           git remote add origin https://github.com/makestuff/build-template.git
           git pull origin main
+          git submodule update --init --recursive
           .\build.cmd Release
 
       - name: Test
         run: |
-          cd build
+          cd ..\build
           ctest -C Release --verbose
