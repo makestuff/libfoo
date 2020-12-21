@@ -26,5 +26,7 @@ jobs:
 
       - name: Test
         run: |
+          pwd
+          find . -type f | sort
           cd ${GITHUB_REPOSITORY#*/}/build
           ctest -C Release --verbose
