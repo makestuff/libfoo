@@ -15,4 +15,16 @@ jobs:
           submodules: 'recursive'
 
       - name: Build
-        run: cd .. && git clone --recursive https://github.com/makestuff/build-template.git && mv ${GITHUB_REPOSITORY#*/} build-template/ && mv build-template ${GITHUB_REPOSITORY#*/} && cd ${GITHUB_REPOSITORY#*/} && ls -la && ./build.sh
+        run: |
+          cd ..
+          git clone --recursive https://github.com/makestuff/build-template.git
+          mv ${GITHUB_REPOSITORY#*/} build-template/
+          mv build-template ${GITHUB_REPOSITORY#*/}
+          cd ${GITHUB_REPOSITORY#*/}
+          ls -la
+          ./build.sh Release
+
+      - name: Test
+        run: |
+          cd ${GITHUB_REPOSITORY#*/}/build
+          ctest -C Release --verbose
