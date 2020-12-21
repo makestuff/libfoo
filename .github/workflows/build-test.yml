@@ -16,13 +16,36 @@ jobs:
 
       - name: Build
         run: |
+          REPO=${GITHUB_REPOSITORY#*/}
           cd ..
           git clone --recursive https://github.com/makestuff/build-template.git
-          mv ${GITHUB_REPOSITORY#*/} build-template/
-          mv build-template ${GITHUB_REPOSITORY#*/}
-          cd ${GITHUB_REPOSITORY#*/}
-          ls -la
+          mv ${REPO} build-template/  # move ${REPO} into build-template
+          mv build-template ${REPO}   # rename build-template to ${REPO}
+          cd ${REPO}
           ./build.sh Release
+
+      - name: Test
+        run: |
+          cd build
+          ctest -C Release --verbose
+
+  build-windows:
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Build
+        shell: pwsh
+        run: |
+          cd ..
+          Start-Process -nnw -wait -filepath "git" -args "clone --recursive https://github.com/makestuff/build-template.git"
+          $REPO = $env:GITHUB_REPOSITORY.split("/")[1]
+          Move-Item -path $REPO -destination build-template
+          Move-Item -path build-template -destination $REPO
+          cd $REPO
+          Start-Process -nnw -wait -filepath "build.cmd" -args "Release"
 
       - name: Test
         run: |
