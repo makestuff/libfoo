@@ -16,12 +16,10 @@ jobs:
 
       - name: Build
         run: |
-          REPO=${GITHUB_REPOSITORY#*/}
           cd ..
-          git clone --recursive https://github.com/makestuff/build-template.git
-          mv ${REPO} build-template/  # move ${REPO} into build-template
-          mv build-template ${REPO}   # rename build-template to ${REPO}
-          cd ${REPO}
+          git init .
+          git remote add origin https://github.com/makestuff/build-template.git
+          git pull origin main
           ./build.sh Release
 
       - name: Test
@@ -37,15 +35,12 @@ jobs:
           submodules: 'recursive'
 
       - name: Build
-        shell: pwsh
         run: |
           cd ..
-          Start-Process -nnw -wait -filepath "git" -args "clone --recursive https://github.com/makestuff/build-template.git"
-          $REPO = $env:GITHUB_REPOSITORY.split("/")[1]
-          Move-Item -path $REPO -destination build-template
-          Move-Item -path build-template -destination $REPO
-          cd $REPO
-          Start-Process -nnw -wait -filepath "build.cmd" -args "Release"
+          git init .
+          git remote add origin https://github.com/makestuff/build-template.git
+          git pull origin main
+          .\build.cmd Release
 
       - name: Test
         run: |
